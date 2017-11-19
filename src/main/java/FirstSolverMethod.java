@@ -2,25 +2,29 @@ public class FirstSolverMethod implements Runnable {
 
     int[][] sudoku;
     int n=9;
+    MyBoolean myBoolean;
 
-    public FirstSolverMethod(int[][] sudoku) {
+
+
+    public FirstSolverMethod(int[][] sudoku, MyBoolean myBoolean) {
         this.sudoku = sudoku;
+        this.myBoolean = myBoolean;
+
     }
-    volatile boolean finished = false;
-
-    public void stopMe()
-    {
-        finished = true;
-        Thread.currentThread().interrupt();
-    }
-
-
 
     public void run() {
-        while (!finished)
-         if(backtrackSolve()) {
-                stopMe();
-            }
+        System.out.println("burda "+Thread.currentThread().getName());
+        while (!myBoolean.isFinished()) {
+                if (backtrackSolve()) {
+                    System.out.println(Thread.currentThread().getName()+" Bitti");
+                    myBoolean.setFinished(true);
+                }
+        }
+        System.out.println(Thread.currentThread().getName()+" interrupted");
+    }
+
+    public int[][] getSudoku() {
+        return sudoku;
     }
 
     public boolean isSuitableToPutXThere(int i, int j, int x) {
@@ -56,38 +60,41 @@ public class FirstSolverMethod implements Runnable {
     }
 
     public boolean backtrackSolve() {
-        int i = 0, j = 0;
-        boolean isThereEmptyCell = false;
+        if(!myBoolean.isFinished()) {
+            int i = 0, j = 0;
+            boolean isThereEmptyCell = false;
 
-        for (int ii = 0; ii < n && !isThereEmptyCell; ii++) {
-            for (int jj = 0; jj < n && !isThereEmptyCell; jj++) {
-                if (sudoku[ii][jj] == 0) {
-                    isThereEmptyCell = true;
-                    i = ii;
-                    j = jj;
+            for (int ii = 0; ii < n && !isThereEmptyCell; ii++) {
+                for (int jj = 0; jj < n && !isThereEmptyCell; jj++) {
+                    if (sudoku[ii][jj] == 0) {
+                        isThereEmptyCell = true;
+                        i = ii;
+                        j = jj;
+                    }
                 }
             }
-        }
 
-        // We've done here.
-        if (!isThereEmptyCell) {
-            return true;
-        }
+            // We've done here.
+            if (!isThereEmptyCell) {
+                return true;
+            }
+            if (myBoolean.isFinished())
+                return false;
 
-        for (int x = 1; x < 10; x++) {
+            for (int x = 1; x < 10; x++) {
 
-            if (isSuitableToPutXThere(i, j, x)) {
-                sudoku[i][j] = x;
+                if (isSuitableToPutXThere(i, j, x)) {
+                    sudoku[i][j] = x;
 
-                if (backtrackSolve()) {
-                    return true;
+                    if (backtrackSolve()) {
+                        return true;
+                    }
+
+                    sudoku[i][j] = 0; // We've failed.
                 }
 
-                sudoku[i][j] = 0; // We've failed.
             }
-
         }
-
         return false; // Backtracking
     }
 
