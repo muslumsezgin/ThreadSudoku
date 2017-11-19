@@ -7,7 +7,7 @@ public class FirstSolverMethod implements Runnable {
     int n = 9;
     MyBoolean myBoolean;
     Winner winner;
-    List<int[][]> pastSteps = new ArrayList<int[][]>();
+    List<int[][]> pastSteps = new ArrayList<>();
     double timer;
 
     public double getTimer() {
@@ -26,52 +26,50 @@ public class FirstSolverMethod implements Runnable {
 
     public void run() {
         long start = System.nanoTime();
-        if (backtrackSolve()) {
-            System.out.println(Thread.currentThread().getName() + " Bitti");
+        if (sudokuSolve()) {
+            System.out.println(Thread.currentThread().getName() + " sonlandırıldı.");
             myBoolean.setFinished(true);
             timer = (System.nanoTime() - start) / 1e6;
-
             System.out.printf("Tasks took %.3f ms to run%n", timer);
             return;
         }
     }
 
 
-    public boolean isSuitableToPutXThere(int i, int j, int x) {
+    private boolean isProperly(int i, int j, int x) {
 
-        // Is 'x' used in row.
-        for (int jj = 0; jj < n; jj++) {
-            if (sudoku[i][jj] == x) {
+        // Satir kontrolu.
+        for (int row = 0; row < n; row++) {
+            if (sudoku[i][row] == x) {
                 return false;
             }
         }
 
-        // Is 'x' used in column.
-        for (int ii = 0; ii < n; ii++) {
-            if (sudoku[ii][j] == x) {
+        // Sutun kontrolu
+        for (int column = 0; column < n; column++) {
+            if (sudoku[column][j] == x) {
                 return false;
             }
         }
 
-        // Is 'x' used in sudoku 3x3 box.
+        // 3x3 kutuları kontrol.
         int boxRow = i - i % 3;
         int boxColumn = j - j % 3;
 
-        for (int ii = 0; ii < 3; ii++) {
-            for (int jj = 0; jj < 3; jj++) {
-                if (sudoku[boxRow + ii][boxColumn + jj] == x) {
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                if (sudoku[boxRow + row][boxColumn + column] == x) {
                     return false;
                 }
             }
         }
 
-        // Everything looks good.
         return true;
     }
 
-    public boolean backtrackSolve() {
+    public boolean sudokuSolve() {
         if (!myBoolean.isFinished()) {
-            pastSteps.add(myClone(sudoku));
+            pastSteps.add(Utils.myClone(sudoku));
             int i = 0, j = 0;
             boolean isThereEmptyCell = false;
 
@@ -124,7 +122,6 @@ public class FirstSolverMethod implements Runnable {
                     for (int line = 1; line <= (9 + 9 - 1); line++) {
                         int start_col = max(0, line - 9);
                         int count = min(line, (9 - start_col), 9);
-
                         for (int k = 0; k < count; k++)
                             if (sudoku[min(9, line) - k - 1][start_col + k] == 0) {
                                 isThereEmptyCell = true;
@@ -187,7 +184,7 @@ public class FirstSolverMethod implements Runnable {
                     }
                     break;
             }
-            // We've done here.
+
             if (!isThereEmptyCell) {
                 winner.setText(Thread.currentThread().getName());
                 winner.setWinnerSudoku(sudoku);
@@ -202,42 +199,30 @@ public class FirstSolverMethod implements Runnable {
             }
 
             for (int x = 1; x < 10; x++) {
-
-                if (isSuitableToPutXThere(i, j, x)) {
+                if (isProperly(i, j, x)) {
                     sudoku[i][j] = x;
-
-                    if (backtrackSolve() || myBoolean.isFinished()) {
+                    if (sudokuSolve() || myBoolean.isFinished()) {
                         return true;
                     }
-
-                    sudoku[i][j] = 0; // We've failed.
+                    sudoku[i][j] = 0;
 
                 }
 
             }
         }
-        return false; // Backtracking
+        return false;
     }
 
-    private static int[][] myClone(int[][] sudokuMatris) {
-        int[][] my = new int[9][9];
-        for (int i = 0; i < sudokuMatris.length; i++) {
-            for (int j = 0; j < sudokuMatris.length; j++) {
-                my[i][j] = sudokuMatris[i][j];
-            }
-        }
-        return my;
-    }
 
-    int min(int a, int b) {
+    private int min(int a, int b) {
         return (a < b) ? a : b;
     }
 
-    int min(int a, int b, int c) {
+    private int min(int a, int b, int c) {
         return min(min(a, b), c);
     }
 
-    int max(int a, int b) {
+    private int max(int a, int b) {
         return (a > b) ? a : b;
     }
 

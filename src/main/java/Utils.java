@@ -25,4 +25,14 @@ public class Utils {
         return 100-((haveZero*100)/(firstInput));
     }
 
+    public static int[][] myClone(int[][] sudokuMatris) {
+        int[][] my = new int[9][9];
+        for (int i = 0; i < sudokuMatris.length; i++) {
+            for (int j = 0; j < sudokuMatris.length; j++) {
+                my[i][j] = sudokuMatris[i][j];
+            }
+        }
+        return my;
+    }
+
 }
