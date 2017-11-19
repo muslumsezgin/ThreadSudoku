@@ -1,3 +1,5 @@
+package com.cosean.sudoku.backend;
+
 import java.util.Arrays;
 
 public class MyBoolean {

@@ -1,10 +1,14 @@
+import com.cosean.sudoku.backend.FirstSolverMethod;
+import com.cosean.sudoku.backend.MyBoolean;
+import com.cosean.sudoku.Utils;
+import com.cosean.sudoku.backend.Winner;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 public class Run {
 
@@ -38,7 +42,7 @@ public class Run {
         }
         MyBoolean myBoolean =new MyBoolean();
         Winner winner =new Winner();
-        FirstSolverMethod firstSolverMethod =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.Diogonal);
+        FirstSolverMethod firstSolverMethod =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.Diagonal);
         FirstSolverMethod firstSolverMethod2 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.BottomLeft);
         FirstSolverMethod firstSolverMethod3 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.BottomRight);
         FirstSolverMethod firstSolverMethod4 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.TopRight);

@@ -1,3 +1,9 @@
+package com.cosean.sudoku.uı;
+
+import com.cosean.sudoku.backend.FirstSolverMethod;
+import com.cosean.sudoku.backend.MyBoolean;
+import com.cosean.sudoku.Utils;
+import com.cosean.sudoku.backend.Winner;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,6 +18,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cosean.sudoku.Utils.Type;
 
 public class SudokuPage extends JFrame {
     private int sudokuMatris[][] = new int[9][9];
@@ -73,9 +81,9 @@ public class SudokuPage extends JFrame {
             threadList = new ArrayList<Thread>();
             MyBoolean myBoolean = new MyBoolean();
             Winner winner = new Winner();
-            thread1 = new FirstSolverMethod(myClone(sudokuMatris), myBoolean, winner,Utils.Type.TopLeft);
+            thread1 = new FirstSolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.TopLeft);
             thread2 = new FirstSolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.TopRight);
-            thread3 = new FirstSolverMethod(myClone(sudokuMatris), myBoolean, winner,Utils.Type.Diogonal);
+            thread3 = new FirstSolverMethod(myClone(sudokuMatris), myBoolean, winner,Utils.Type.Diagonal);
             thread4 = new FirstSolverMethod(myClone(sudokuMatris), myBoolean, winner,Utils.Type.BottomLeft);
             thread5 = new FirstSolverMethod(myClone(sudokuMatris), myBoolean, winner,Utils.Type.BottomRight);
 
@@ -354,7 +362,17 @@ public class SudokuPage extends JFrame {
     }
 
     private void initUI() {
-
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         createMenuBar();
         setTitle("Simple example");
         setSize(900, 750);

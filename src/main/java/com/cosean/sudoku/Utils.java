@@ -1,11 +1,13 @@
+package com.cosean.sudoku;
+
 public class Utils {
 
-    enum Type {
+    public enum Type {
         TopLeft,
         TopRight,
         BottomLeft,
         BottomRight,
-        Diogonal,
+        Diagonal,
         Spiral,
     };
 

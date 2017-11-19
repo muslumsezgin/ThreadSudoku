@@ -1,14 +1,18 @@
+package com.cosean.sudoku.backend;
+
+import com.cosean.sudoku.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class FirstSolverMethod implements Runnable {
 
-    int[][] sudoku;
+    public int[][] sudoku;
     int n = 9;
-    MyBoolean myBoolean;
-    Winner winner;
-    List<int[][]> pastSteps = new ArrayList<>();
-    double timer;
+    public MyBoolean myBoolean;
+    public Winner winner;
+    public List<int[][]> pastSteps = new ArrayList<>();
+    public double timer;
 
     public double getTimer() {
         return timer;
@@ -118,7 +122,7 @@ public class FirstSolverMethod implements Runnable {
                         }
                     }
                     break;
-                case Diogonal:
+                case Diagonal:
                     for (int line = 1; line <= (9 + 9 - 1); line++) {
                         int start_col = max(0, line - 9);
                         int count = min(line, (9 - start_col), 9);
