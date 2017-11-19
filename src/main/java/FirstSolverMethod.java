@@ -1,9 +1,13 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class FirstSolverMethod implements Runnable {
 
     int[][] sudoku;
     int n=9;
     MyBoolean myBoolean;
     Winner winner;
+    List<int[][]>pastSteps =new ArrayList<int[][]>();
 
 
     public FirstSolverMethod(int[][] sudoku, MyBoolean myBoolean, Winner winner) {
@@ -55,6 +59,7 @@ public class FirstSolverMethod implements Runnable {
 
     public boolean backtrackSolve() {
         if(!myBoolean.isFinished()) {
+            pastSteps.add(myClone(sudoku));
             int i = 0, j = 0;
             boolean isThereEmptyCell = false;
 
@@ -73,6 +78,7 @@ public class FirstSolverMethod implements Runnable {
                 winner.setText(Thread.currentThread().getName());
                 winner.setWinnerSudoku(sudoku);
                 System.out.println("Biten Thread : "+Thread.currentThread().getName());
+
                 return true;
             }
 
@@ -85,17 +91,27 @@ public class FirstSolverMethod implements Runnable {
                 if (isSuitableToPutXThere(i, j, x)) {
                     sudoku[i][j] = x;
 
-
                     if (backtrackSolve()||myBoolean.isFinished()) {
                         return true;
                     }
 
                     sudoku[i][j] = 0; // We've failed.
+
                 }
 
             }
         }
         return false; // Backtracking
+    }
+
+    private static int[][] myClone(int[][] sudokuMatris) {
+        int [][] my =new int[9][9];
+        for (int i = 0; i < sudokuMatris.length; i++) {
+            for (int j = 0; j < sudokuMatris.length; j++) {
+                my[i][j]=sudokuMatris[i][j];
+            }
+        }
+        return my;
     }
 
 }

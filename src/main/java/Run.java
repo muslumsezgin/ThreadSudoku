@@ -57,8 +57,17 @@ public class Run {
                     runner++;
         }while (runner>0);
 
-        writeMatrix(winner.getWinnerSudoku());
-        System.out.println(winner.getText());
+        //writeMatrix(winner.getWinnerSudoku());
+        //System.out.println(winner.getText());
+        writeMatrix(firstSolverMethod.pastSteps.get(0));
+        writeMatrix(firstSolverMethod.pastSteps.get(1));
+        writeMatrix(firstSolverMethod.pastSteps.get(2));
+        //writeMatrix(firstSolverMethod.pastSteps.get(3));
+        //writeMatrix(firstSolverMethod2.pastSteps.get(0));
+        //writeMatrix(firstSolverMethod3.pastSteps.get(0));
+        System.out.println(firstSolverMethod.pastSteps.size());
+        System.out.println(firstSolverMethod2.pastSteps.size());
+        System.out.println(firstSolverMethod3.pastSteps.size());
 
 
     }
