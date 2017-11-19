@@ -1,6 +1,6 @@
 package com.cosean.sudoku.backend;
 
-import com.cosean.sudoku.Utils;
+import com.cosean.sudoku.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +138,6 @@ public class FirstSolverMethod implements Runnable {
                     int ii, k = 0, l = 0, m = 9, n = 9;
                     main:
                     while (k < m && l < n) {
-                        // Print the first row from the remaining rows
                         for (ii = l; ii < n; ++ii) {
                             if (sudoku[k][ii] == 0) {
                                 isThereEmptyCell = true;
@@ -146,11 +145,8 @@ public class FirstSolverMethod implements Runnable {
                                 j = ii;
                                 break main;
                             }
-
                         }
                         k++;
-
-                        // Print the last column from the remaining columns
                         for (ii = k; ii < m; ++ii) {
                             if (sudoku[ii][n - 1] == 0) {
                                 isThereEmptyCell = true;
@@ -160,8 +156,6 @@ public class FirstSolverMethod implements Runnable {
                             }
                         }
                         n--;
-
-                        // Print the last row from the remaining rows */
                         if (k < m) {
                             for (ii = n - 1; ii >= l; --ii) {
                                 if (sudoku[m - 1][ii] == 0) {
@@ -172,7 +166,6 @@ public class FirstSolverMethod implements Runnable {
                                 }
                             }
                             m--;
-
                         }
                         if (l < n) {
                             for (ii = m - 1; ii >= k; --ii) {

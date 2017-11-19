@@ -2,7 +2,7 @@ package com.cosean.sudoku.uı;
 
 import com.cosean.sudoku.backend.FirstSolverMethod;
 import com.cosean.sudoku.backend.MyBoolean;
-import com.cosean.sudoku.Utils;
+import com.cosean.sudoku.utils.Utils;
 import com.cosean.sudoku.backend.Winner;
 
 import javax.swing.*;
@@ -18,8 +18,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.cosean.sudoku.Utils.Type;
 
 public class SudokuPage extends JFrame {
     private int sudokuMatris[][] = new int[9][9];
@@ -289,7 +287,9 @@ public class SudokuPage extends JFrame {
         eMenuItem.setMnemonic(KeyEvent.VK_O);
         eMenuItem.setToolTipText("Open Sudoku File");
         eMenuItem.addActionListener(event -> {
-            JFileChooser chooser = new JFileChooser();
+            String userDir = System.getProperty("user.home");
+
+            JFileChooser chooser = new JFileChooser(userDir +"/Desktop");
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                     "Text File", "txt");
             chooser.setFileFilter(filter);
