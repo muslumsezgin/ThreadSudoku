@@ -1,3 +1,5 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +19,16 @@ public class FirstSolverMethod implements Runnable {
     }
 
     public void run() {
+        long start=System.nanoTime();
         if (backtrackSolve()) {
             System.out.println(Thread.currentThread().getName()+" Bitti");
             myBoolean.setFinished(true);
+            long time = System.nanoTime() - start;
+            System.out.printf("Tasks took %.3f ms to run%n", time/1e6);
             return;
         }
     }
+
 
 
     public boolean isSuitableToPutXThere(int i, int j, int x) {
