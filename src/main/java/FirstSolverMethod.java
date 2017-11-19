@@ -3,29 +3,23 @@ public class FirstSolverMethod implements Runnable {
     int[][] sudoku;
     int n=9;
     MyBoolean myBoolean;
+    Winner winner;
 
 
-
-    public FirstSolverMethod(int[][] sudoku, MyBoolean myBoolean) {
+    public FirstSolverMethod(int[][] sudoku, MyBoolean myBoolean, Winner winner) {
         this.sudoku = sudoku;
         this.myBoolean = myBoolean;
-
+        this.winner = winner;
     }
 
     public void run() {
-        System.out.println("burda "+Thread.currentThread().getName());
-        while (!myBoolean.isFinished()) {
-                if (backtrackSolve()) {
-                    System.out.println(Thread.currentThread().getName()+" Bitti");
-                    myBoolean.setFinished(true);
-                }
+        if (backtrackSolve()) {
+            System.out.println(Thread.currentThread().getName()+" Bitti");
+            myBoolean.setFinished(true);
+            return;
         }
-        System.out.println(Thread.currentThread().getName()+" interrupted");
     }
 
-    public int[][] getSudoku() {
-        return sudoku;
-    }
 
     public boolean isSuitableToPutXThere(int i, int j, int x) {
 
@@ -76,17 +70,23 @@ public class FirstSolverMethod implements Runnable {
 
             // We've done here.
             if (!isThereEmptyCell) {
+                winner.setText(Thread.currentThread().getName());
+                winner.setWinnerSudoku(sudoku);
+                System.out.println("Biten Thread : "+Thread.currentThread().getName());
                 return true;
             }
-            if (myBoolean.isFinished())
+
+            if (myBoolean.isFinished()){
                 return false;
+            }
 
             for (int x = 1; x < 10; x++) {
 
                 if (isSuitableToPutXThere(i, j, x)) {
                     sudoku[i][j] = x;
 
-                    if (backtrackSolve()) {
+
+                    if (backtrackSolve()||myBoolean.isFinished()) {
                         return true;
                     }
 

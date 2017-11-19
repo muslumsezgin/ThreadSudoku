@@ -36,41 +36,62 @@ public class Run {
         }catch(IOException ex){
             System.err.println("hata olustu...");
         }
+        MyBoolean myBoolean =new MyBoolean();
+        Winner winner =new Winner();
+        FirstSolverMethod firstSolverMethod =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner);
+        FirstSolverMethod firstSolverMethod2 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner);
+        FirstSolverMethod firstSolverMethod3 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner);
 
-        threadList.add(new Thread(new FirstSolverMethod(sudokuMatris)));
-        threadList.add(new Thread(new FirstSolverMethod(sudokuMatris)));
-        threadList.add(new Thread(new FirstSolverMethod(sudokuMatris)));
+        threadList.add(new Thread(firstSolverMethod));
+        threadList.add(new Thread(firstSolverMethod2));
+        threadList.add(new Thread(firstSolverMethod3));
         for(Thread t:threadList)
             t.start();
-        try
-        {
-            while(threadList.get(0).isAlive())
-            {
-                System.out.println("Main thread will be alive till the child thread is live");
-                Thread.sleep(1500);
-            }
+
+
+        int runner=0;
+        do{
+            runner=0;
+            for(Thread t :threadList)
+                if(t.isAlive())
+                    runner++;
+        }while (runner>0);
+
+        writeMatrix(winner.getWinnerSudoku());
+        System.out.println(winner.getText());
+
+
     }
-        catch(InterruptedException e)
-        {
-            System.out.println("Main thread interrupted");
+
+    private static int[][] myClone(int[][] sudokuMatris) {
+        int [][] my =new int[9][9];
+        for (int i = 0; i < sudokuMatris.length; i++) {
+            for (int j = 0; j < sudokuMatris.length; j++) {
+                my[i][j]=sudokuMatris[i][j];
+            }
         }
-        System.out.println("Main thread's run is over" );
-
-            System.out.println("-------------------------------------");
-            for (int column = 0; column < 9; column++) {
-                System.out.println();
-                for (int row = 0; row < 9; row++) {
-                    System.out.print(sudokuMatris[column][row]);
-                }
-            }
-            System.out.println();
-            System.out.println("-------------------------------------");
-
-
+        return my;
     }
 
-    public synchronized void stop() throws IOException {
+    public static synchronized void stop() throws IOException {
         for (Thread threads : threadList)
             threads.interrupt();
+    }
+
+    static void writeMatrix(int[][] solution) {
+        for (int i = 0; i < 9; ++i) {
+            if (i % 3 == 0)
+                System.out.println(" -----------------------");
+            for (int j = 0; j < 9; ++j) {
+                if (j % 3 == 0) System.out.print("| ");
+                System.out.print(solution[i][j] == 0
+                        ? " "
+                        : Integer.toString(solution[i][j]));
+
+                System.out.print(' ');
+            }
+            System.out.println("|");
+        }
+        System.out.println(" -----------------------");
     }
 }
