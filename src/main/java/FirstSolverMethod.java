@@ -1,20 +1,19 @@
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FirstSolverMethod implements Runnable {
 
     int[][] sudoku;
-    int n=9;
+    int n = 9;
     MyBoolean myBoolean;
     Winner winner;
-    List<int[][]>pastSteps =new ArrayList<int[][]>();
+    List<int[][]> pastSteps = new ArrayList<int[][]>();
     double timer;
 
     public double getTimer() {
         return timer;
     }
+
     Utils.Type type;
 
 
@@ -26,17 +25,16 @@ public class FirstSolverMethod implements Runnable {
     }
 
     public void run() {
-        long start=System.nanoTime();
+        long start = System.nanoTime();
         if (backtrackSolve()) {
-            System.out.println(Thread.currentThread().getName()+" Bitti");
+            System.out.println(Thread.currentThread().getName() + " Bitti");
             myBoolean.setFinished(true);
-            timer = ( System.nanoTime() - start) / 1e6;
+            timer = (System.nanoTime() - start) / 1e6;
 
             System.out.printf("Tasks took %.3f ms to run%n", timer);
             return;
         }
     }
-
 
 
     public boolean isSuitableToPutXThere(int i, int j, int x) {
@@ -72,12 +70,12 @@ public class FirstSolverMethod implements Runnable {
     }
 
     public boolean backtrackSolve() {
-        if(!myBoolean.isFinished()) {
+        if (!myBoolean.isFinished()) {
             pastSteps.add(myClone(sudoku));
             int i = 0, j = 0;
             boolean isThereEmptyCell = false;
 
-            switch (type){
+            switch (type) {
                 case TopLeft:
                     for (int ii = 0; ii < n && !isThereEmptyCell; ii++) {
                         for (int jj = 0; jj < n && !isThereEmptyCell; jj++) {
@@ -91,7 +89,7 @@ public class FirstSolverMethod implements Runnable {
                     break;
                 case TopRight:
                     for (int ii = 0; ii < n && !isThereEmptyCell; ii++) {
-                        for (int jj = 8; jj >-1 && !isThereEmptyCell; jj--) {
+                        for (int jj = 8; jj > -1 && !isThereEmptyCell; jj--) {
                             if (sudoku[ii][jj] == 0) {
                                 isThereEmptyCell = true;
                                 i = ii;
@@ -113,7 +111,7 @@ public class FirstSolverMethod implements Runnable {
                     break;
                 case BottomRight:
                     for (int ii = 8; ii > -1 && !isThereEmptyCell; ii--) {
-                        for (int jj = 8; jj >-1 && !isThereEmptyCell; jj--) {
+                        for (int jj = 8; jj > -1 && !isThereEmptyCell; jj--) {
                             if (sudoku[ii][jj] == 0) {
                                 isThereEmptyCell = true;
                                 i = ii;
@@ -123,33 +121,83 @@ public class FirstSolverMethod implements Runnable {
                     }
                     break;
                 case Diogonal:
-                    for (int line=1; line<=(9 + 9 -1); line++)
-                    {
-                        int start_col =  max(0, line-9);
-                        int count = min(line, (9-start_col), 9);
+                    for (int line = 1; line <= (9 + 9 - 1); line++) {
+                        int start_col = max(0, line - 9);
+                        int count = min(line, (9 - start_col), 9);
 
-                        for (int k=0; k<count; k++)
-                            if(sudoku[min(9, line)-k-1][start_col+k]==0){
+                        for (int k = 0; k < count; k++)
+                            if (sudoku[min(9, line) - k - 1][start_col + k] == 0) {
                                 isThereEmptyCell = true;
-                                i = min(9, line)-k-1;
-                                j = start_col+k;
+                                i = min(9, line) - k - 1;
+                                j = start_col + k;
                             }
 
                     }
+                case Spiral:
+                    int ii, k = 0, l = 0, m = 9, n = 9;
+                    main:
+                    while (k < m && l < n) {
+                        // Print the first row from the remaining rows
+                        for (ii = l; ii < n; ++ii) {
+                            if (sudoku[k][ii] == 0) {
+                                isThereEmptyCell = true;
+                                i = k;
+                                j = ii;
+                                break main;
+                            }
+
+                        }
+                        k++;
+
+                        // Print the last column from the remaining columns
+                        for (ii = k; ii < m; ++ii) {
+                            if (sudoku[ii][n - 1] == 0) {
+                                isThereEmptyCell = true;
+                                i = ii;
+                                j = n - 1;
+                                break main;
+                            }
+                        }
+                        n--;
+
+                        // Print the last row from the remaining rows */
+                        if (k < m) {
+                            for (ii = n - 1; ii >= l; --ii) {
+                                if (sudoku[m - 1][ii] == 0) {
+                                    isThereEmptyCell = true;
+                                    i = m - 1;
+                                    j = ii;
+                                    break main;
+                                }
+                            }
+                            m--;
+
+                        }
+                        if (l < n) {
+                            for (ii = m - 1; ii >= k; --ii) {
+                                if (sudoku[ii][l] == 0) {
+                                    isThereEmptyCell = true;
+                                    i = ii;
+                                    j = l;
+                                    break main;
+                                }
+                            }
+                            l++;
+                        }
+                    }
                     break;
             }
-
             // We've done here.
             if (!isThereEmptyCell) {
                 winner.setText(Thread.currentThread().getName());
                 winner.setWinnerSudoku(sudoku);
                 winner.setPastSteps(pastSteps);
-                System.out.println("Biten Thread : "+Thread.currentThread().getName());
+                System.out.println("Biten Thread : " + Thread.currentThread().getName());
 
                 return true;
             }
 
-            if (myBoolean.isFinished()){
+            if (myBoolean.isFinished()) {
                 return false;
             }
 
@@ -158,7 +206,7 @@ public class FirstSolverMethod implements Runnable {
                 if (isSuitableToPutXThere(i, j, x)) {
                     sudoku[i][j] = x;
 
-                    if (backtrackSolve()||myBoolean.isFinished()) {
+                    if (backtrackSolve() || myBoolean.isFinished()) {
                         return true;
                     }
 
@@ -172,23 +220,26 @@ public class FirstSolverMethod implements Runnable {
     }
 
     private static int[][] myClone(int[][] sudokuMatris) {
-        int [][] my =new int[9][9];
+        int[][] my = new int[9][9];
         for (int i = 0; i < sudokuMatris.length; i++) {
             for (int j = 0; j < sudokuMatris.length; j++) {
-                my[i][j]=sudokuMatris[i][j];
+                my[i][j] = sudokuMatris[i][j];
             }
         }
         return my;
     }
 
-     int min(int a, int b)
-    { return (a < b)? a: b; }
+    int min(int a, int b) {
+        return (a < b) ? a : b;
+    }
 
-     int min(int a, int b, int c)
-    { return min(min(a, b), c);}
+    int min(int a, int b, int c) {
+        return min(min(a, b), c);
+    }
 
-     int max(int a, int b)
-    { return (a > b)? a: b; }
+    int max(int a, int b) {
+        return (a > b) ? a : b;
+    }
 
 }
 

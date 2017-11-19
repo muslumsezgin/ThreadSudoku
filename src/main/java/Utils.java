@@ -5,7 +5,8 @@ public class Utils {
         TopRight,
         BottomLeft,
         BottomRight,
-        Diogonal
+        Diogonal,
+        Spiral,
     };
 
     public static double completePercent(int [][] firstSudokuMatris,int[][] lastSudokuMatris){
