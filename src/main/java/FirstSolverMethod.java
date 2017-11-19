@@ -11,11 +11,14 @@ public class FirstSolverMethod implements Runnable {
     Winner winner;
     List<int[][]>pastSteps =new ArrayList<int[][]>();
 
+    Utils.Type type;
 
-    public FirstSolverMethod(int[][] sudoku, MyBoolean myBoolean, Winner winner) {
+
+    public FirstSolverMethod(int[][] sudoku, MyBoolean myBoolean, Winner winner, Utils.Type type) {
         this.sudoku = sudoku;
         this.myBoolean = myBoolean;
         this.winner = winner;
+        this.type = type;
     }
 
     public void run() {
@@ -69,14 +72,66 @@ public class FirstSolverMethod implements Runnable {
             int i = 0, j = 0;
             boolean isThereEmptyCell = false;
 
-            for (int ii = 0; ii < n && !isThereEmptyCell; ii++) {
-                for (int jj = 0; jj < n && !isThereEmptyCell; jj++) {
-                    if (sudoku[ii][jj] == 0) {
-                        isThereEmptyCell = true;
-                        i = ii;
-                        j = jj;
+            switch (type){
+                case TopLeft:
+                    for (int ii = 0; ii < n && !isThereEmptyCell; ii++) {
+                        for (int jj = 0; jj < n && !isThereEmptyCell; jj++) {
+                            if (sudoku[ii][jj] == 0) {
+                                isThereEmptyCell = true;
+                                i = ii;
+                                j = jj;
+                            }
+                        }
                     }
-                }
+                    break;
+                case TopRight:
+                    for (int ii = 0; ii < n && !isThereEmptyCell; ii++) {
+                        for (int jj = 8; jj >-1 && !isThereEmptyCell; jj--) {
+                            if (sudoku[ii][jj] == 0) {
+                                isThereEmptyCell = true;
+                                i = ii;
+                                j = jj;
+                            }
+                        }
+                    }
+                    break;
+                case BottomLeft:
+                    for (int ii = 8; ii > -1 && !isThereEmptyCell; ii--) {
+                        for (int jj = 0; jj < n && !isThereEmptyCell; jj++) {
+                            if (sudoku[ii][jj] == 0) {
+                                isThereEmptyCell = true;
+                                i = ii;
+                                j = jj;
+                            }
+                        }
+                    }
+                    break;
+                case BottomRight:
+                    for (int ii = 8; ii > -1 && !isThereEmptyCell; ii--) {
+                        for (int jj = 8; jj >-1 && !isThereEmptyCell; jj--) {
+                            if (sudoku[ii][jj] == 0) {
+                                isThereEmptyCell = true;
+                                i = ii;
+                                j = jj;
+                            }
+                        }
+                    }
+                    break;
+                case Diogonal:
+                    for (int line=1; line<=(9 + 9 -1); line++)
+                    {
+                        int start_col =  max(0, line-9);
+                        int count = min(line, (9-start_col), 9);
+
+                        for (int k=0; k<count; k++)
+                            if(sudoku[min(9, line)-k-1][start_col+k]==0){
+                                isThereEmptyCell = true;
+                                i = min(9, line)-k-1;
+                                j = start_col+k;
+                            }
+
+                    }
+                    break;
             }
 
             // We've done here.
@@ -119,6 +174,15 @@ public class FirstSolverMethod implements Runnable {
         }
         return my;
     }
+
+     int min(int a, int b)
+    { return (a < b)? a: b; }
+
+     int min(int a, int b, int c)
+    { return min(min(a, b), c);}
+
+     int max(int a, int b)
+    { return (a > b)? a: b; }
 
 }
 

@@ -38,13 +38,17 @@ public class Run {
         }
         MyBoolean myBoolean =new MyBoolean();
         Winner winner =new Winner();
-        FirstSolverMethod firstSolverMethod =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner);
-        FirstSolverMethod firstSolverMethod2 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner);
-        FirstSolverMethod firstSolverMethod3 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner);
+        FirstSolverMethod firstSolverMethod =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.Diogonal);
+        FirstSolverMethod firstSolverMethod2 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.BottomLeft);
+        FirstSolverMethod firstSolverMethod3 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.BottomRight);
+        FirstSolverMethod firstSolverMethod4 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.TopRight);
+        FirstSolverMethod firstSolverMethod5 =new FirstSolverMethod(myClone(sudokuMatris),myBoolean,winner, Utils.Type.TopLeft);
 
         threadList.add(new Thread(firstSolverMethod));
         threadList.add(new Thread(firstSolverMethod2));
         threadList.add(new Thread(firstSolverMethod3));
+        threadList.add(new Thread(firstSolverMethod4));
+        threadList.add(new Thread(firstSolverMethod5));
         for(Thread t:threadList)
             t.start();
 
@@ -57,17 +61,19 @@ public class Run {
                     runner++;
         }while (runner>0);
 
-        //writeMatrix(winner.getWinnerSudoku());
-        //System.out.println(winner.getText());
-        writeMatrix(firstSolverMethod.pastSteps.get(0));
-        writeMatrix(firstSolverMethod.pastSteps.get(1));
-        writeMatrix(firstSolverMethod.pastSteps.get(2));
+        writeMatrix(winner.getWinnerSudoku());
+        System.out.println(winner.getText());
+        //writeMatrix(firstSolverMethod.pastSteps.get(0));
+       // writeMatrix(firstSolverMethod.pastSteps.get(1));
+       // writeMatrix(firstSolverMethod.pastSteps.get(2));
         //writeMatrix(firstSolverMethod.pastSteps.get(3));
         //writeMatrix(firstSolverMethod2.pastSteps.get(0));
         //writeMatrix(firstSolverMethod3.pastSteps.get(0));
         System.out.println(firstSolverMethod.pastSteps.size());
         System.out.println(firstSolverMethod2.pastSteps.size());
         System.out.println(firstSolverMethod3.pastSteps.size());
+        System.out.println(firstSolverMethod4.pastSteps.size());
+        System.out.println(firstSolverMethod5.pastSteps.size());
 
 
     }

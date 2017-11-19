@@ -1,6 +1,14 @@
 public class Utils {
 
-    private static double completePercent(int [][] firstSudokuMatris,int[][] lastSudokuMatris){
+    enum Type {
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight,
+        Diogonal
+    };
+
+    public static double completePercent(int [][] firstSudokuMatris,int[][] lastSudokuMatris){
         int haveZero=0;
         int firstInput=0;
         for (int i = 0; i < 9; i++) {
