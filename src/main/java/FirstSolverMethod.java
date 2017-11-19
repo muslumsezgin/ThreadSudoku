@@ -10,7 +10,11 @@ public class FirstSolverMethod implements Runnable {
     MyBoolean myBoolean;
     Winner winner;
     List<int[][]>pastSteps =new ArrayList<int[][]>();
+    double timer;
 
+    public double getTimer() {
+        return timer;
+    }
     Utils.Type type;
 
 
@@ -26,8 +30,9 @@ public class FirstSolverMethod implements Runnable {
         if (backtrackSolve()) {
             System.out.println(Thread.currentThread().getName()+" Bitti");
             myBoolean.setFinished(true);
-            long time = System.nanoTime() - start;
-            System.out.printf("Tasks took %.3f ms to run%n", time/1e6);
+            timer = ( System.nanoTime() - start) / 1e6;
+
+            System.out.printf("Tasks took %.3f ms to run%n", timer);
             return;
         }
     }
@@ -138,6 +143,7 @@ public class FirstSolverMethod implements Runnable {
             if (!isThereEmptyCell) {
                 winner.setText(Thread.currentThread().getName());
                 winner.setWinnerSudoku(sudoku);
+                winner.setPastSteps(pastSteps);
                 System.out.println("Biten Thread : "+Thread.currentThread().getName());
 
                 return true;
