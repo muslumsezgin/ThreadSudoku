@@ -73,7 +73,7 @@ public class SolverMethod implements Runnable {
 
     private boolean sudokuSolve() {
         if (!myBoolean.isFinished()) {
-            pastSteps.add(Utils.myClone(sudoku));
+            pastSteps.add(Utils.sudokuClone(sudoku));
             int i = 0, j = 0;
             boolean isThereEmptyCell = false;
 

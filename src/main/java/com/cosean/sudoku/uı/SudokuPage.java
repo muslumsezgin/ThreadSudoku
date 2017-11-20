@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cosean.sudoku.utils.Utils.myClone;
+import static com.cosean.sudoku.utils.Utils.sudokuClone;
 
 public class SudokuPage extends JFrame {
 
@@ -63,12 +63,12 @@ public class SudokuPage extends JFrame {
             threadList = new ArrayList<>();
             ThreadFlag myBoolean = new ThreadFlag();
             Winner winner = new Winner();
-            thread1 = new SolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.TopLeft);
-            thread2 = new SolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.TopRight);
-            thread3 = new SolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.Diagonal);
-            thread4 = new SolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.BottomLeft);
-            thread5 = new SolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.BottomRight);
-            thread6 = new SolverMethod(myClone(sudokuMatris), myBoolean, winner, Utils.Type.Spiral);
+            thread1 = new SolverMethod(sudokuClone(sudokuMatris), myBoolean, winner, Utils.Type.TopLeft);
+            thread2 = new SolverMethod(sudokuClone(sudokuMatris), myBoolean, winner, Utils.Type.TopRight);
+            thread3 = new SolverMethod(sudokuClone(sudokuMatris), myBoolean, winner, Utils.Type.Diagonal);
+            thread4 = new SolverMethod(sudokuClone(sudokuMatris), myBoolean, winner, Utils.Type.BottomLeft);
+            thread5 = new SolverMethod(sudokuClone(sudokuMatris), myBoolean, winner, Utils.Type.BottomRight);
+            thread6 = new SolverMethod(sudokuClone(sudokuMatris), myBoolean, winner, Utils.Type.Spiral);
 
             threadList.add(new Thread(thread1));
             threadList.add(new Thread(thread2));
@@ -385,8 +385,29 @@ public class SudokuPage extends JFrame {
         eMenuItem2.setToolTipText("Exit application");
         eMenuItem2.addActionListener(event -> System.exit(0));
 
+        JMenuItem eMenuItemFile = new JMenuItem("Check for updates");
+        eMenuItemFile.setMnemonic(KeyEvent.VK_T);
+        eMenuItemFile.setToolTipText("Check for updates");
+        eMenuItemFile.addActionListener(ev->
+               JOptionPane.showMessageDialog(SudokuPage.this,
+                        "You already have lastest version",
+                        "Check for updates.",
+                        JOptionPane.INFORMATION_MESSAGE)
+        );
+
+        JMenuItem eMenuItemFile2 = new JMenuItem("About");
+        eMenuItemFile2.setMnemonic(KeyEvent.VK_P);
+        eMenuItemFile2.setToolTipText("About");
+        eMenuItemFile2.addActionListener(event ->  JOptionPane.showMessageDialog(SudokuPage.this,
+                "Developers:\nMüslüm Sezgin - Anıl Coşar",
+                "About",
+                JOptionPane.INFORMATION_MESSAGE)
+        );
         file.add(eMenuItem);
         file.add(eMenuItem2);
+
+        help.add(eMenuItemFile);
+        help.add(eMenuItemFile2);
 
         menuBar.add(file);
         menuBar.add(help);
