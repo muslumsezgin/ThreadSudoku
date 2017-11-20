@@ -1,11 +1,10 @@
 package com.cosean.sudoku.backend;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Winner {
-    private String text ;
-    private int [][] winnerSudoku;
+    private String text;
+    private int[][] winnerSudoku;
     private List<int[][]> pastSteps;
 
     public List<int[][]> getPastSteps() {

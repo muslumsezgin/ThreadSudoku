@@ -5,23 +5,23 @@ import com.cosean.sudoku.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstSolverMethod implements Runnable {
+public class SolverMethod implements Runnable {
 
     public int[][] sudoku;
-    int n = 9;
-    public MyBoolean myBoolean;
-    public Winner winner;
+    private final int n = 9;
+    private ThreadFlag myBoolean;
+    private Winner winner;
     public List<int[][]> pastSteps = new ArrayList<>();
-    public double timer;
+    private double timer;
 
     public double getTimer() {
         return timer;
     }
 
-    Utils.Type type;
+    private Utils.Type type;
 
 
-    public FirstSolverMethod(int[][] sudoku, MyBoolean myBoolean, Winner winner, Utils.Type type) {
+    public SolverMethod(int[][] sudoku, ThreadFlag myBoolean, Winner winner, Utils.Type type) {
         this.sudoku = sudoku;
         this.myBoolean = myBoolean;
         this.winner = winner;
@@ -31,11 +31,11 @@ public class FirstSolverMethod implements Runnable {
     public void run() {
         long start = System.nanoTime();
         if (sudokuSolve()) {
-            System.out.println(Thread.currentThread().getName() + " sonlandırıldı.");
+            System.out.println(Thread.currentThread().getName() + " closing.");
             myBoolean.setFinished(true);
             timer = (System.nanoTime() - start) / 1e6;
             System.out.printf("Tasks took %.3f ms to run%n", timer);
-            return;
+            return ;
         }
     }
 
@@ -71,7 +71,7 @@ public class FirstSolverMethod implements Runnable {
         return true;
     }
 
-    public boolean sudokuSolve() {
+    private boolean sudokuSolve() {
         if (!myBoolean.isFinished()) {
             pastSteps.add(Utils.myClone(sudoku));
             int i = 0, j = 0;
@@ -134,6 +134,7 @@ public class FirstSolverMethod implements Runnable {
                             }
 
                     }
+                    break;
                 case Spiral:
                     int ii, k = 0, l = 0, m = 9, n = 9;
                     main:
@@ -180,13 +181,15 @@ public class FirstSolverMethod implements Runnable {
                         }
                     }
                     break;
+                default:
+                    break;
             }
 
             if (!isThereEmptyCell) {
                 winner.setText(Thread.currentThread().getName());
                 winner.setWinnerSudoku(sudoku);
                 winner.setPastSteps(pastSteps);
-                System.out.println("Biten Thread : " + Thread.currentThread().getName());
+                System.out.println("Finish Thread : " + Thread.currentThread().getName());
 
                 return true;
             }
