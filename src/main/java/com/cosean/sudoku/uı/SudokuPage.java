@@ -12,10 +12,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -525,8 +522,11 @@ public class SudokuPage extends JFrame {
     }
 
     private void initUI() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        String s = classLoader.getResource("icon//icon.png").getPath();
         createMenuBar();
         setTitle("Cosean Sudoku");
+        setIconImage(new ImageIcon(s.substring(1)).getImage());
         setSize(900, 750);
         setLayout(null);
         setLocationRelativeTo(null);
